@@ -194,7 +194,6 @@ module Fabricio
       
       def crashfree_request_model(organization_id, app_id, start_time, end_time)
         path = growth_analytics_endpoint_2(organization_id, app_id, 'crash_free_users_for_top_builds')
-        puts path
         params = {
             'transformation' => 'weighted',
             'start' => start_time,
