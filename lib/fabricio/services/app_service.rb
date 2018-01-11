@@ -152,6 +152,14 @@ module Fabricio
         crashes = crashes(id, start_time, end_time, [build])
         1 - crashes.to_f / sessions
       end
+      
+      def crashfree_mobile(id, start_time, end_time)
+        organization_id = get(id).json['organization_id']
+        request_model = @request_model_factory.crashfree_request_model(organization_id, id, start_time, end_time)
+        response = @network_client.perform_request(request_model)
+        all_builds = JSON.parse(response.body)['builds']['all']
+        all_builds.reduce(0) { |sum, element| sum + element[1] } / all_builds.count
+      end
 
       # Obtains top issues
       #

@@ -191,6 +191,24 @@ module Fabricio
         end
         model
       end
+      
+      def crashfree_request_model(organization_id, app_id, start_time, end_time)
+        path = growth_analytics_endpoint_2(organization_id, app_id, 'crash_free_users_for_top_builds')
+        puts path
+        params = {
+            'transformation' => 'weighted',
+            'start' => start_time,
+            'end' => end_time,
+            'limit' => 3
+        }
+        model = Fabricio::Networking::RequestModel.new do |config|
+          config.type = :GET
+          config.base_url = FABRIC_API_URL
+          config.api_path = path
+          config.params = params
+        end
+        model
+      end
 
       # Returns a request model for obtaining top issues
       #
@@ -363,6 +381,10 @@ module Fabricio
       # @return [String]
       def growth_analytics_endpoint(session, app_id, name)
         "#{FABRIC_API_PATH}#{org_app_endpoint(session, app_id)}/growth_analytics/#{name}.json"
+      end
+      
+      def growth_analytics_endpoint_2(organization_id, app_id, name)
+        "#{FABRIC_API_PATH}#{FABRIC_ORGANIZATIONS_ENDPOINT}/#{organization_id}/apps/#{app_id}/growth_analytics/#{name}.json"
       end
 
       # Returns an API path to organization endpoint
